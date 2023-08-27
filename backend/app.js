@@ -6,6 +6,7 @@ const helmet = require('helmet');
 const { errors } = require('celebrate');
 const router = require('./routes');
 const { errorHandler } = require('./middlewares/error-handler');
+const { requestLogger, errorLogger } = require('./middlewares/logger');
 const NotFoundError = require('./errors/NotFoundError');
 
 require('dotenv').config();
@@ -27,7 +28,16 @@ app.use(helmet());
 // app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json());
 
+app.get('/crash-test', () => {
+  setTimeout(() => {
+    throw new Error('Сервер сейчас упадёт');
+  }, 0);
+});
+app.use(requestLogger); // подключаем логгер запросов
+
 app.use(router);
+
+app.use(errorLogger); // подключаем логгер ошибок
 
 app.use('*', (req, res, next) => {
   next(new NotFoundError('Страница не найдена'));
