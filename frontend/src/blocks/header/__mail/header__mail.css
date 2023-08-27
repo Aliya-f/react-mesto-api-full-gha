@@ -1,0 +1,21 @@
+.header__mail {
+  font-family: "Inter", Arial, sans-serif;
+  color: #fff;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 22px;
+  margin: 45px 40px auto auto;
+}
+
+@media screen and (max-width: 1024px) {
+  .header__mail {
+    margin-top: 28px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .header__mail {
+    margin: 0;
+    text-align: center;
+  }
+}

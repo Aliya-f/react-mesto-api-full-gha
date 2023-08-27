@@ -1,0 +1,6 @@
+.popup__success_type_fail{
+  background-image: url(../../../../images/not-success.svg);
+  min-height: 120px;
+  background-repeat: no-repeat;
+  background-position: center;
+}

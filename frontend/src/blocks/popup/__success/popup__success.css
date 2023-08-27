@@ -1,0 +1,6 @@
+.popup__success {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 34px;
+}

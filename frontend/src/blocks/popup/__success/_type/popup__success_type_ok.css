@@ -1,0 +1,6 @@
+.popup__success_type_ok{
+  background-image: url(../../../../images/success.svg);
+  min-height: 120px;
+  background-repeat: no-repeat;
+  background-position: center;
+}
