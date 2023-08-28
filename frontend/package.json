@@ -40,5 +40,6 @@
   "description": "## Описание проекта 👍",
   "main": "babel.config.js",
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {}
 }

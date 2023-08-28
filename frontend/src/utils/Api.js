@@ -2,6 +2,7 @@ class Api {
   constructor(options) {
     this.baseUrl = options.baseUrl;
     this.headers = options.headers;
+    this._token = options.token;
   }
 
   _checkResponse(res) {
@@ -15,7 +16,9 @@ class Api {
   getInitialCards() {
     return fetch(`${this.baseUrl}/cards`, {
       method: "GET",
-      headers: this.headers,
+      headers:  {
+        authorization: `Bearer ${this._token}`
+      },
     }).then(this._checkResponse);
   }
 
@@ -23,7 +26,9 @@ class Api {
   createCard(newCard) {
     return fetch(`${this.baseUrl}/cards`, {
       method: "POST",
-      headers: this.headers,
+      headers:  {
+        authorization: `Bearer ${this._token}`
+      },
       body: JSON.stringify({
         name: newCard.name,
         link: newCard.link,
@@ -35,21 +40,27 @@ class Api {
   deleteCard(id) {
     return fetch(`${this.baseUrl}/cards/${id}`, {
       method: "DELETE",
-      headers: this.headers,
+      headers:  {
+        authorization: `Bearer ${this._token}`
+      },
     }).then(this._checkResponse);
   }
 
   // редактирование данных профиля
   getUserInfo() {
     return fetch(`${this.baseUrl}/users/me`, {
-      headers: this.headers,
+      headers:  {
+        authorization: `Bearer ${this._token}`
+      },
     }).then(this._checkResponse);
   }
 
   setUserInfo(item) {
     return fetch(`${this.baseUrl}/users/me`, {
       method: "PATCH",
-      headers: this.headers,
+      headers:  {
+        authorization: `Bearer ${this._token}`
+      },
       body: JSON.stringify({
         name: item.name,
         about: item.about,
@@ -61,14 +72,14 @@ class Api {
   likeCard(id) {
     return fetch(`${this.baseUrl}/cards/${id}/likes`, {
       method: "PUT",
-      headers: this.headers,
+      headers: this._token,
     }).then(this._checkResponse);
   }
 
   dislikeCard(id) {
     return fetch(`${this.baseUrl}/cards/${id}/likes`, {
       method: "DELETE",
-      headers: this.headers,
+      headers: this._token,
     }).then(this._checkResponse);
   }
 
@@ -83,7 +94,9 @@ class Api {
   setAvatar(data) {
     return fetch(`${this.baseUrl}/users/me/avatar`, {
       method: "PATCH",
-      headers: this.headers,
+      headers:  {
+        authorization: `Bearer ${this._token}`
+      },
       body: JSON.stringify({
         avatar: data.avatar,
       }),
@@ -92,9 +105,10 @@ class Api {
 }
 
 export const api = new Api({
-  baseUrl: "https://mesto.nomoreparties.co/v1/cohort-66",
+  baseUrl: "https://api.domainname.students.nomoredomainsicu.ru",
   headers: {
     "content-type": "application/json",
-    authorization: "2043a062-45f6-4faf-829f-6adc32416166",
+    token: null
+    // authorization: "2043a062-45f6-4faf-829f-6adc32416166",
   },
 });

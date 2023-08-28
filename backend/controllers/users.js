@@ -8,6 +8,7 @@ const ValidationError = require('../errors/ValidationError');
 const { getJwtToken } = require('../utils/jwt');
 
 const saltRounds = 10;
+const { NODE_ENV, JWT_SECRET } = process.env;
 
 // получение списка пользователей
 module.exports.getUsers = (req, res, next) => {
@@ -117,6 +118,7 @@ module.exports.login = (req, res, next) => {
           }
           const token = getJwtToken(
             { _id: user._id },
+            NODE_ENV === 'production' ? JWT_SECRET : 'some-secret-key',
             { expiresIn: '7d' },
           );
           return res.send({ jwt: token });

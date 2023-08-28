@@ -177,7 +177,7 @@ function App() {
         })
         .catch((err) => console.log(err));
     }
-  }, []);
+  }, [navigate]);
   // удаление токена
   function onSignOut() {
     localStorage.removeItem('JWT');

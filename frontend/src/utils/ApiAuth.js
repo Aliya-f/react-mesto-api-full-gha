@@ -1,5 +1,5 @@
 class ApiAuth {
-  constructor(baseUrl) {
+  constructor({baseUrl}) {
     this.baseUrl = baseUrl;
   }
   // проверка на ошибки
@@ -15,7 +15,7 @@ class ApiAuth {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        "Authorization" : `Bearer ${token}`
+        authorization : `Bearer ${token}`
       }
     }).then((res) => this._checkResponse(res));
   }
@@ -45,7 +45,6 @@ class ApiAuth {
   }
 }
 
-export const apiAuth = new ApiAuth(
-  `https://auth.nomoreparties.co`
-  
-);
+export const apiAuth = new ApiAuth({
+  baseUrl: 'https://api.domainname.students.nomoredomainsicu.ru' ,
+});
