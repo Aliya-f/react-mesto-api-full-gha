@@ -218,7 +218,7 @@ function App() {
             cards={cards}
             />}
           />
-          <Route path="sign-up" element={<Register onRegister={handleRegister} isLoggedIn={isLoggedIn} />} />
+          <Route path="/sign-up" element={<Register onRegister={handleRegister} isLoggedIn={isLoggedIn} />} />
           <Route path="/sign-in" element={<Login onAuth={handleLogin} isLoggedIn={isLoggedIn} />} />
           <Route path="*" element={isLoggedIn ? <Navigate to="/" replace /> : <Navigate to="/sign-in" replace />} />
         </Routes>

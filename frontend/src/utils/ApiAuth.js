@@ -21,7 +21,7 @@ class ApiAuth {
   }
   // регистрация
   signUp({ email, password }) {
-    return fetch(`${this.baseUrl}/signup`, {
+    return fetch(`${this.baseUrl}/sign-up`, {
       method: 'POST',
       headers: {
         "Content-Type": "application/json"},
@@ -33,7 +33,7 @@ class ApiAuth {
   }
   // вход
   signIn({ email, password }) {
-    return fetch(`${this.baseUrl}/signin`, {
+    return fetch(`${this.baseUrl}/sign-in`, {
       method: 'POST',
       headers: {
         "Content-Type": "application/json"},
