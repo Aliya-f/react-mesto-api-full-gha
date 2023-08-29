@@ -1,5 +1,5 @@
 class ApiAuth {
-  constructor({baseUrl}) {
+  constructor(baseUrl) {
     this.baseUrl = baseUrl;
   }
   // проверка на ошибки
@@ -45,6 +45,6 @@ class ApiAuth {
   }
 }
 
-export const apiAuth = new ApiAuth({
-  baseUrl: 'https://api.domainname.students.nomoredomainsicu.ru' ,
-});
+export const apiAuth = new ApiAuth(
+  `https://api.domainname.students.nomoredomainsicu.ru` ,
+);

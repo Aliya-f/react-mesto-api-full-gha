@@ -148,6 +148,7 @@ function App() {
     apiAuth
       .signIn({ email, password })
       .then((data) => {
+        console.log('handleLogin: data:', data)
         if (data.token) {
           setEmail(email);
           setIsLoggedIn(true)

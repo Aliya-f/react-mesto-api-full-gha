@@ -77,7 +77,6 @@ app.use(router);
 app.use(errorLogger); // подключаем логгер ошибок
 
 app.use('*', (req, res, next) => {
-  console.log('TEST');
   next(new NotFoundError('Страница не найдена'));
 });
 
