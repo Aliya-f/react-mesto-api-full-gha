@@ -41,7 +41,6 @@ function App() {
 
   // отрисовка массива карточек и инфо пользователя
   React.useEffect(() => {
-    if (!isLoggedIn) return;
     api
       .getUserInfo()
       .then((data) => {
@@ -55,7 +54,7 @@ function App() {
         setCards(res);
       })
       .catch((err) => console.log(err));
-  }, [isLoggedIn]);
+  }, []);
 
   // попапы аватарки, профиля, добавления карточки, открытия карточки
   function handleEditAvatarClick() {
@@ -150,10 +149,10 @@ function App() {
       .then((data) => {
         console.log('handleLogin: data:', data)
         if (data.token) {
+          navigate("/")
           setEmail(email);
           setIsLoggedIn(true)
           localStorage.setItem('JWT', data.token);
-          navigate("/")
         }
       })
       .catch((err) => {
