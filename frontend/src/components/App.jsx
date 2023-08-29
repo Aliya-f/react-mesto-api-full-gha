@@ -39,8 +39,33 @@ function App() {
   // хук
   const navigate = useNavigate();
 
+  // проверка токена
+  React.useEffect(() => {
+    const token = localStorage.getItem('JWT');
+      if (token)
+      {
+        apiAuth
+        .checkToken(token)
+        .then((data) => {
+          if (data) {
+            setIsLoggedIn(true); // вошли
+            api._token = token;
+            localStorage.setItem('token', token);
+//            setEmail(data.data.email); // получаем почту
+            navigate("/"); // перебрасываем в профиль
+            return data.json()
+          } else {
+            return Promise.reject(`Ошибка: ${data.status}`);
+          }
+        })
+        .then(({ data }) => setEmail(data.email))
+        .catch((err) => console.log(err));
+    }
+  }, []);
+
   // отрисовка массива карточек и инфо пользователя
   React.useEffect(() => {
+    if (isLoggedIn) {
     api
       .getUserInfo()
       .then((data) => {
@@ -54,7 +79,13 @@ function App() {
         setCards(res);
       })
       .catch((err) => console.log(err));
-  }, []);
+      navigate("/")
+    }
+    else {
+      localStorage.removeItem('token');
+      navigate('/sign-in');
+    }
+  }, [isLoggedIn]);
 
   // попапы аватарки, профиля, добавления карточки, открытия карточки
   function handleEditAvatarClick() {
@@ -145,15 +176,12 @@ function App() {
   // аутентификация
   function handleLogin(email, password) {
     apiAuth
-      .signIn({ email, password })
-      .then((data) => {
-        console.log('handleLogin: data:', data)
-        if (data.token) {
-          navigate("/")
-          setEmail(email);
-          setIsLoggedIn(true)
-          localStorage.setItem('JWT', data.token);
-        }
+      .signIn({ email, password})
+      .then(({token}) => {
+        localStorage.setItem('JWT', token);
+        api._token = token;
+        setEmail(email);
+        setIsLoggedIn(true)
       })
       .catch((err) => {
         setIsInfoTooltipSuccess(false); // fail
@@ -161,23 +189,7 @@ function App() {
         console.log(err);
       });
   }
-  // проверка токена
-  React.useEffect(() => {
-    const token = localStorage.getItem('JWT');
-      if (token)
-      {
-        apiAuth
-        .checkToken(token)
-        .then((data) => {
-          if (data) {
-            setIsLoggedIn(true); // вошли
-            setEmail(data.data.email); // получаем почту
-            navigate("/"); // перебрасываем в профиль
-          }
-        })
-        .catch((err) => console.log(err));
-    }
-  }, []);
+
   // удаление токена
   function onSignOut() {
     localStorage.removeItem('JWT');
