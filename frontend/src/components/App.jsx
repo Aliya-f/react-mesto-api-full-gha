@@ -41,6 +41,7 @@ function App() {
 
   // отрисовка массива карточек и инфо пользователя
   React.useEffect(() => {
+    // if (!isLoggedIn) return;
     api
       .getUserInfo()
       .then((data) => {
@@ -54,7 +55,6 @@ function App() {
         setCards(res);
       })
       .catch((err) => console.log(err));
-      checkToken();
   }, []);
 
   // попапы аватарки, профиля, добавления карточки, открытия карточки
@@ -159,7 +159,7 @@ function App() {
       .then((data) => {
         if (data.token) {
           navigate("/");
-          handleLogin();
+          handleToken();
         }
       })
       .catch((err) => {
@@ -186,7 +186,7 @@ function App() {
   //   }
   // }, []);
 
-  function handleLogin() {
+  function handleToken() {
     setIsLoggedIn(true);
     checkToken();
   }
