@@ -20,7 +20,7 @@ module.exports.createCard = (req, res) => {
       res.status(http2.constants.HTTP_STATUS_CREATED).send(card);
     })
     .catch((err) => {
-      console.log(err);
+      console.log(err.stack)
       if (err.name === 'ValidationError') {
         return res.status(http2.constants.HTTP_STATUS_BAD_REQUEST).send({
           message: `${Object.values(err.errors).map(() => err.message).join(', ')}`,

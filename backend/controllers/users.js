@@ -1,14 +1,16 @@
 const http2 = require('http2');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 const ConflictError = require('../errors/ConflictError');
 const NotFoundError = require('../errors/NotFoundError');
 const AuthError = require('../errors/AuthError');
 const ValidationError = require('../errors/ValidationError');
-const { getJwtToken } = require('../utils/jwt');
+// const { getJwtToken } = require('../utils/jwt');
+require('dotenv').config();
 
 const saltRounds = 10;
-const { NODE_ENV, JWT_SECRET } = process.env;
+const { JWT_SECRET, NODE_ENV } = process.env;
 
 // получение списка пользователей
 module.exports.getUsers = (req, res, next) => {
@@ -68,6 +70,7 @@ module.exports.createUser = (req, res, next) => {
 module.exports.updateProfile = (req, res, next) => {
   const { name, about } = req.body;
   const id = req.user._id;
+  console.log({ name, about }) // выводит undefined
   return User.findByIdAndUpdate(id, { name, about }, { new: true, runValidators: true })
     .then((user) => {
       if (!user) {
@@ -116,13 +119,19 @@ module.exports.login = (req, res, next) => {
           if (!correctPassword) {
             return next(new AuthError('Неверный пароль'));
           }
-          const token = getJwtToken(
-            { _id: user._id },
-            NODE_ENV === 'production' ? JWT_SECRET : 'some-secret-key',
-            { expiresIn: '7d' },
-          );
-          return res.send({ jwt: token });
+          return user;
         });
+    })
+    .then((user) => {
+      const token = jwt.sign(
+        { _id: user._id },
+        NODE_ENV === 'production' ? JWT_SECRET : 'some-secret-key',
+        { expiresIn: '7d' },
+      );
+      // console.log(token, 'при создании') // токен создался
+      // console.log(NODE_ENV)
+      // console.log(JWT_SECRET)
+      return res.send({ token });
     })
     .catch(next);
 };

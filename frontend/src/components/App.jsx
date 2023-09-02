@@ -32,40 +32,19 @@ function App() {
   // 12: попап успешной регистрации
   const [isInfoTooltipSuccess, setIsInfoTooltipSuccess] = React.useState(false);
   // информация о входе
-  const [isLoggedIn, setIsLoggedIn] = React.useState(false);
+  const [isLoggedIn, setIsLoggedIn] = React.useState(null);
   const [email, setEmail] = React.useState('');
   // попап модального окна,который информирует пользователя об успешной (или не очень) регистрации
   const [isInfoTooltipOpen, setIsInfoTooltipOpen] = React.useState(false);
   // хук
   const navigate = useNavigate();
 
-  // проверка токена
-  React.useEffect(() => {
-    const token = localStorage.getItem('JWT');
-      if (token)
-      {
-        apiAuth
-        .checkToken(token)
-        .then((data) => {
-          if (data) {
-            setIsLoggedIn(true); // вошли
-            api._token = token;
-            localStorage.setItem('token', token);
-//            setEmail(data.data.email); // получаем почту
-            navigate("/"); // перебрасываем в профиль
-            return data.json()
-          } else {
-            return Promise.reject(`Ошибка: ${data.status}`);
-          }
-        })
-        .then(({ data }) => setEmail(data.email))
-        .catch((err) => console.log(err));
-    }
-  }, []);
-
   // отрисовка массива карточек и инфо пользователя
   React.useEffect(() => {
-    if (isLoggedIn) {
+    // const token = localStorage.getItem('JWT');
+    if (!isLoggedIn) return;
+
+      // console.log(token) // токен из хранилища приходит
     api
       .getUserInfo()
       .then((data) => {
@@ -76,16 +55,13 @@ function App() {
     api
       .getInitialCards()
       .then((res) => {
+        // console.log(token)
         setCards(res);
       })
       .catch((err) => console.log(err));
-      navigate("/")
-    }
-    else {
-      localStorage.removeItem('token');
-      navigate('/sign-in');
-    }
+
   }, [isLoggedIn]);
+  
 
   // попапы аватарки, профиля, добавления карточки, открытия карточки
   function handleEditAvatarClick() {
@@ -118,21 +94,27 @@ function App() {
   // лайк
   function handleCardLike({ likes, _id }) {
     // Снова проверяем, есть ли лайк
-    const isLiked = likes.some((i) => i._id === currentUser._id);
+    const isLiked = likes.some((user) => user === currentUser._id
+    );
     // Отправляем запрос в API и получаем обновлённые данные карточки
     api
       .changeLikeCardStatus(_id, isLiked)
       .then((newCard) => {
+        console.log(newCard)
         setCards((state) => state.map((c) => (c._id === _id ? newCard : c)));
       })
       .catch((err) => console.log(err));
   }
 
+  // обновить профиль
   function handleUpdateUser(data) {
+    // console.log(data) //указанные данные выводит
     api
       .setUserInfo(data)
-      .then((res) => {
-        setCurrentUser(res);
+      .then(() => {
+        console.log(data) //указанные данные выводит
+        // console.log(res) // но вносятся прежние данные, не изменяя
+        setCurrentUser(data);
         closeAllPopups();
       })
       .catch((err) => console.log(err));
@@ -141,17 +123,19 @@ function App() {
   function handleUpdateAvatar(data) {
     api
       .setAvatar(data)
-      .then((res) => {
-        setCurrentUser(res);
+      .then(() => {
+        setCurrentUser(data);
         closeAllPopups();
       })
       .catch((err) => console.log(err));
   }
   // добавить карточки
   function handleAddPlaceSubmit(data) {
+    console.log(data) //выводит данные из формы
     api
       .createCard(data)
       .then((newCard) => {
+        console.log(newCard)
         setCards([newCard, ...cards]);
         closeAllPopups();
       })
@@ -177,11 +161,13 @@ function App() {
   function handleLogin(email, password) {
     apiAuth
       .signIn({ email, password})
-      .then(({token}) => {
-        localStorage.setItem('JWT', token);
-        api._token = token;
+      .then((res) => {
+        localStorage.setItem('JWT', res.token);
+        // console.log(res.token) // токен приходит
+        // api._token = res.token;
         setEmail(email);
         setIsLoggedIn(true)
+        navigate("/")
       })
       .catch((err) => {
         setIsInfoTooltipSuccess(false); // fail
@@ -190,6 +176,26 @@ function App() {
       });
   }
 
+  // проверка токена
+  React.useEffect(() => {
+    const token = localStorage.getItem('JWT');
+      if (token)
+      {
+        apiAuth
+        .checkToken(token)
+        .then((data) => {
+          
+          if (data) {
+            setIsLoggedIn(true); // вошли
+            setEmail(data.email); // получаем почту
+            setCurrentUser(data)
+            navigate("/"); // перебрасываем в профиль
+          }
+        })
+        .catch((err) => console.log(err));
+    }
+  }, []);
+
   // удаление токена
   function onSignOut() {
     localStorage.removeItem('JWT');
@@ -197,12 +203,12 @@ function App() {
     setEmail("");
     navigate("/sign-in");
   }
-
   React.useEffect(() => {
     if (isLoggedIn) {
       navigate('/');
     }
   }, [isLoggedIn, navigate]);
+
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
@@ -217,9 +223,9 @@ function App() {
           path='/'
           element={
             <ProtectedRoute
-            element={Main}
             isLoggedIn={isLoggedIn}
             email={email}
+            element={Main}
             onSignOut={onSignOut}
             onEditAvatar={handleEditAvatarClick}
             onEditProfile={handleEditProfileClick}
@@ -230,9 +236,9 @@ function App() {
             cards={cards}
             />}
           />
+          <Route path="*" element={isLoggedIn ? <Navigate to="/" replace /> : <Navigate to="/sign-in" replace />} />
           <Route path="/sign-up" element={<Register onRegister={handleRegister} isLoggedIn={isLoggedIn} />} />
           <Route path="/sign-in" element={<Login onAuth={handleLogin} isLoggedIn={isLoggedIn} />} />
-          <Route path="*" element={isLoggedIn ? <Navigate to="/" replace /> : <Navigate to="/sign-in" replace />} />
         </Routes>
         <Footer />
         {/* POPUP: Сменить аватар */}

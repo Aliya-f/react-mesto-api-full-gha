@@ -14,6 +14,7 @@ class ApiAuth {
     return fetch(`${this.baseUrl}/users/me`, {
       method: "GET",
       headers: {
+        Accept: "application/json*",
         "Content-Type": "application/json",
         authorization : `Bearer ${token}`
       }
@@ -36,15 +37,20 @@ class ApiAuth {
     return fetch(`${this.baseUrl}/sign-in`, {
       method: 'POST',
       headers: {
+        "Accept": "application/json",
         "Content-Type": "application/json"},
       body: JSON.stringify({
         password: password,
         email: email,
       }),
-    }).then((res) => this._checkResponse(res));
+    }).then((res) => this._checkResponse(res))
   }
 }
 
 export const apiAuth = new ApiAuth({
-  baseUrl: 'https://api.domainname.students.nomoredomainsicu.ru' ,
+//  baseUrl: 'https://api.domainname.students.nomoredomainsicu.ru' ,
+  baseUrl: '//localhost:3001',
+  headers: {
+    "content-type": "application/json",
+  }
 });

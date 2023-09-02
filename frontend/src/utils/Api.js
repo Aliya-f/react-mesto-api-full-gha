@@ -17,23 +17,27 @@ class Api {
     return fetch(`${this.baseUrl}/cards`, {
       method: "GET",
       headers:  {
-        authorization: `Bearer ${this._token}`
+        authorization: `Bearer ${localStorage.getItem('JWT')}`,
+        // Accept: "*/*"
       },
     }).then(this._checkResponse);
   }
 
   // добавление карточки
   createCard(newCard) {
+    console.log(newCard) // выводит введенные в форму данные
     return fetch(`${this.baseUrl}/cards`, {
       method: "POST",
       headers:  {
-        authorization: `Bearer ${this._token}`
+        authorization: `Bearer ${localStorage.getItem('JWT')}`,
       },
       body: JSON.stringify({
         name: newCard.name,
         link: newCard.link,
       }),
-    }).then(this._checkResponse);
+    },
+    console.log(newCard.name) // выводит введенные в форму данные
+    ).then(this._checkResponse);
   }
 
   // удаление карточки
@@ -41,25 +45,30 @@ class Api {
     return fetch(`${this.baseUrl}/cards/${id}`, {
       method: "DELETE",
       headers:  {
-        authorization: `Bearer ${this._token}`
+        authorization: `Bearer ${localStorage.getItem('JWT')}`,
+      },
+    }).then(this._checkResponse);
+  }
+
+  // данные профиля
+  getUserInfo() {
+//    const token = localStorage.getItem('JWT')
+//    console.log(token)
+    return fetch(`${this.baseUrl}/users/me`, {
+      headers:  {
+        authorization: `Bearer ${localStorage.getItem('JWT')}`,
+        Accept: "*/*"
       },
     }).then(this._checkResponse);
   }
 
   // редактирование данных профиля
-  getUserInfo() {
-    return fetch(`${this.baseUrl}/users/me`, {
-      headers:  {
-        authorization: `Bearer ${this._token}`
-      },
-    }).then(this._checkResponse);
-  }
-
   setUserInfo(item) {
+    console.log(item) // приходят указанные данные
     return fetch(`${this.baseUrl}/users/me`, {
       method: "PATCH",
       headers:  {
-        authorization: `Bearer ${this._token}`
+        authorization: `Bearer ${localStorage.getItem('JWT')}`
       },
       body: JSON.stringify({
         name: item.name,
@@ -70,21 +79,28 @@ class Api {
 
   // лайк
   likeCard(id) {
+    const token = localStorage.getItem('JWT')
+    console.log(token)
     return fetch(`${this.baseUrl}/cards/${id}/likes`, {
       method: "PUT",
-      headers: this._token,
+      headers:  {
+        authorization: `Bearer ${localStorage.getItem('JWT')}`,
+      },
     }).then(this._checkResponse);
   }
 
   dislikeCard(id) {
     return fetch(`${this.baseUrl}/cards/${id}/likes`, {
       method: "DELETE",
-      headers: this._token,
+      headers:  {
+        authorization: `Bearer ${localStorage.getItem('JWT')}`,
+      },
     }).then(this._checkResponse);
   }
 
   changeLikeCardStatus(id, hasLike) {
     if (!hasLike) {
+
       return api.likeCard(id);
     }
     return api.dislikeCard(id);
@@ -95,7 +111,7 @@ class Api {
     return fetch(`${this.baseUrl}/users/me/avatar`, {
       method: "PATCH",
       headers:  {
-        authorization: `Bearer ${this._token}`
+        authorization: `Bearer ${localStorage.getItem('JWT')}`,
       },
       body: JSON.stringify({
         avatar: data.avatar,
@@ -105,10 +121,10 @@ class Api {
 }
 
 export const api = new Api({
-  baseUrl: "https://api.domainname.students.nomoredomainsicu.ru",
+  //baseUrl: "https://api.domainname.students.nomoredomainsicu.ru",
+  baseUrl: '//localhost:3001',
   headers: {
     "content-type": "application/json",
-    token: null
-    // authorization: "2043a062-45f6-4faf-829f-6adc32416166",
+    // Authorization: `Bearer ${localStorage.getItem('JWT')}`,
   },
 });
