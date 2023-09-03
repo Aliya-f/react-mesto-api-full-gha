@@ -25,19 +25,17 @@ class Api {
 
   // добавление карточки
   createCard(newCard) {
-    console.log(newCard) // выводит введенные в форму данные
     return fetch(`${this.baseUrl}/cards`, {
       method: "POST",
       headers:  {
+        "Content-type": "application/json",
         authorization: `Bearer ${localStorage.getItem('JWT')}`,
       },
       body: JSON.stringify({
         name: newCard.name,
         link: newCard.link,
       }),
-    },
-    console.log(newCard.name) // выводит введенные в форму данные
-    ).then(this._checkResponse);
+    }).then(this._checkResponse);
   }
 
   // удаление карточки
@@ -68,6 +66,7 @@ class Api {
     return fetch(`${this.baseUrl}/users/me`, {
       method: "PATCH",
       headers:  {
+        "Content-type": "application/json",
         authorization: `Bearer ${localStorage.getItem('JWT')}`
       },
       body: JSON.stringify({
@@ -111,6 +110,7 @@ class Api {
     return fetch(`${this.baseUrl}/users/me/avatar`, {
       method: "PATCH",
       headers:  {
+        "Content-type": "application/json",
         authorization: `Bearer ${localStorage.getItem('JWT')}`,
       },
       body: JSON.stringify({
@@ -124,7 +124,7 @@ export const api = new Api({
   //baseUrl: "https://api.domainname.students.nomoredomainsicu.ru",
   baseUrl: '//localhost:3001',
   headers: {
-    "content-type": "application/json",
+    "Content-type": "application/json",
     // Authorization: `Bearer ${localStorage.getItem('JWT')}`,
   },
 });

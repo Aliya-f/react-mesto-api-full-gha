@@ -100,7 +100,6 @@ function App() {
     api
       .changeLikeCardStatus(_id, isLiked)
       .then((newCard) => {
-        console.log(newCard)
         setCards((state) => state.map((c) => (c._id === _id ? newCard : c)));
       })
       .catch((err) => console.log(err));
@@ -111,10 +110,10 @@ function App() {
     // console.log(data) //указанные данные выводит
     api
       .setUserInfo(data)
-      .then(() => {
+      .then((res) => {
         console.log(data) //указанные данные выводит
-        // console.log(res) // но вносятся прежние данные, не изменяя
-        setCurrentUser(data);
+        console.log(res) // но вносятся прежние данные, не изменяя
+        setCurrentUser(res);
         closeAllPopups();
       })
       .catch((err) => console.log(err));
@@ -123,19 +122,17 @@ function App() {
   function handleUpdateAvatar(data) {
     api
       .setAvatar(data)
-      .then(() => {
-        setCurrentUser(data);
+      .then((res) => {
+        setCurrentUser(res);
         closeAllPopups();
       })
       .catch((err) => console.log(err));
   }
   // добавить карточки
   function handleAddPlaceSubmit(data) {
-    console.log(data) //выводит данные из формы
     api
       .createCard(data)
       .then((newCard) => {
-        console.log(newCard)
         setCards([newCard, ...cards]);
         closeAllPopups();
       })

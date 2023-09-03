@@ -26,7 +26,6 @@ export default function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
       name: name,
       link: link,
     });
-    console.log(name) // выводит новое значение
   }
 
   return (
