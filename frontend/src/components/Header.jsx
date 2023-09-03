@@ -19,20 +19,20 @@ function Header({ isLoggedIn, email, onSignOut }) {
     <>
       <div className={`mobile-menu ${isMobileMenuOpen && "mobile-menu_type_opened"}`} >
         <h2 className="mobile-menu__email">{email}</h2>
-        <Link className="mobile-menu__exit" to={'/sign-in'} onClick={onSignOut}>Выйти</Link>
+        <Link className="mobile-menu__exit" to={'/signin'} onClick={onSignOut}>Выйти</Link>
       </div>
       <div className="header">
         <img src={logo} alt="Место" className="header__logo" />
-        {location.pathname === '/sign-in' && (
-          <Link className='header__link' to={'/sign-up'}>Регистрация</Link>
+        {location.pathname === '/signin' && (
+          <Link className='header__link' to={'/signup'}>Регистрация</Link>
         )}
-        {location.pathname === '/sign-up' && (
-          <Link className='header__link' to={'/sign-in'}>Вход</Link>
+        {location.pathname === '/signup' && (
+          <Link className='header__link' to={'/signin'}>Вход</Link>
         )}
         {isLoggedIn && (
           <div className='header__text'>
             <div className='header__mail'>{email}</div>
-            <Link className='header__link' to={'/sign-in'} onClick={onSignOut}>Выйти</Link>
+            <Link className='header__link' to={'/signin'} onClick={onSignOut}>Выйти</Link>
           </div>
         )}
         {isLoggedIn && (

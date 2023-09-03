@@ -10,7 +10,7 @@ const {
 } = require('../controllers/users');
 
 router.post(
-  '/sign-up',
+  '/signup',
   celebrate({
     body: Joi.object().keys({
       name: Joi.string().min(2).max(30),
@@ -24,7 +24,7 @@ router.post(
 );
 
 router.post(
-  '/sign-in',
+  '/signin',
   celebrate({
     body: Joi.object().keys({
       email: Joi.string().required().email(),

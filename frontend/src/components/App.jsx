@@ -145,7 +145,7 @@ function App() {
       .then((data) => {
         if (data) {
           setIsInfoTooltipSuccess(true); // успешный вход
-          navigate("/sign-in")
+          navigate("/signin")
         }
       })
       .catch((err) => {
@@ -198,7 +198,7 @@ function App() {
     localStorage.removeItem('JWT');
     setIsLoggedIn(false);
     setEmail("");
-    navigate("/sign-in");
+    navigate("/signin");
   }
   React.useEffect(() => {
     if (isLoggedIn) {
@@ -233,9 +233,9 @@ function App() {
             cards={cards}
             />}
           />
-          <Route path="*" element={isLoggedIn ? <Navigate to="/" replace /> : <Navigate to="/sign-in" replace />} />
-          <Route path="/sign-up" element={<Register onRegister={handleRegister} isLoggedIn={isLoggedIn} />} />
-          <Route path="/sign-in" element={<Login onAuth={handleLogin} isLoggedIn={isLoggedIn} />} />
+          <Route path="*" element={isLoggedIn ? <Navigate to="/" replace /> : <Navigate to="/signin" replace />} />
+          <Route path="/signup" element={<Register onRegister={handleRegister} isLoggedIn={isLoggedIn} />} />
+          <Route path="/signin" element={<Login onAuth={handleLogin} isLoggedIn={isLoggedIn} />} />
         </Routes>
         <Footer />
         {/* POPUP: Сменить аватар */}

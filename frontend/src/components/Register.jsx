@@ -52,7 +52,7 @@ export default function Register({ onRegister }) {
       />
       <button type="submit" className="auth__button">Зарегистрироваться</button>
       <p className="auth__text">Уже зарегистрированы?{' '}
-        <Link to="/sign-in" className="auth__link">Войти</Link>
+        <Link to="/signin" className="auth__link">Войти</Link>
       </p>
     </form>
   );
