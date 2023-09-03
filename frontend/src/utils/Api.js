@@ -1,7 +1,7 @@
 class Api {
   constructor(options) {
     this.baseUrl = options.baseUrl;
-    this.headers = options.headers;
+    this._headers = options.headers;
     this._token = options.token;
   }
 
@@ -121,8 +121,8 @@ class Api {
 }
 
 export const api = new Api({
-  //baseUrl: "https://api.domainname.students.nomoredomainsicu.ru",
-  baseUrl: '//localhost:3001',
+  baseUrl: "https://api.domainname.students.nomoredomainsicu.ru",
+  // baseUrl: '//localhost:3001',
   headers: {
     "Content-type": "application/json",
     // Authorization: `Bearer ${localStorage.getItem('JWT')}`,

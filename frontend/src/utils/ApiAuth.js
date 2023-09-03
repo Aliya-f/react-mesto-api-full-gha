@@ -48,8 +48,8 @@ class ApiAuth {
 }
 
 export const apiAuth = new ApiAuth({
-//  baseUrl: 'https://api.domainname.students.nomoredomainsicu.ru' ,
-  baseUrl: '//localhost:3001',
+  baseUrl: 'https://api.domainname.students.nomoredomainsicu.ru' ,
+  // baseUrl: '//localhost:3001',
   headers: {
     "content-type": "application/json",
   }
