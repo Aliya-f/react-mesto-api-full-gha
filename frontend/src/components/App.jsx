@@ -32,7 +32,7 @@ function App() {
   // 12: попап успешной регистрации
   const [isInfoTooltipSuccess, setIsInfoTooltipSuccess] = React.useState(false);
   // информация о входе
-  const [isLoggedIn, setIsLoggedIn] = React.useState(null);
+  const [isLoggedIn, setIsLoggedIn] = React.useState(false);
   const [email, setEmail] = React.useState('');
   // попап модального окна,который информирует пользователя об успешной (или не очень) регистрации
   const [isInfoTooltipOpen, setIsInfoTooltipOpen] = React.useState(false);
